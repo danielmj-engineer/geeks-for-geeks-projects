@@ -3,10 +3,11 @@
 #include <time.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h> 
 #define MAX 3
 
-void choose(int *n);
-long int random();
+void choose(long *n);
+long random(void);
 
 struct choice {
     char *name;
@@ -17,7 +18,7 @@ struct options {
     struct choice choice[MAX];
 };
 
-int main() {
+int main(void) {
 
     struct options o = {
         .choice = {
@@ -32,12 +33,14 @@ int main() {
         }
     };
 
-    int n = 0;
+    long n = 0;
 
-    int pc = random();
+    long pc = random();
 
-    while ((n <= 0) || (n >= 4)) {
-        choose(&n);
+    for (;;) {
+        if ((n <= 0) || (n >= 4)) {
+            choose(&n);
+        }
     }
 
     for (int i = 0; i <= 2; i++) {
@@ -82,22 +85,33 @@ int main() {
                 printf("You win!\n");
         }
             break;
+        default:
+            printf("This shouldn't have happened.\n");
+            break;
     }
 
     return 0;
 }
 
-void choose(int *n) {
-    printf("Options:\n");
+void choose(long *n) {
+    char temp[4] = "a\0";
+    char *endptr;
+
+    printf("\nOptions:\n");
     printf("1 - Rock\n");
     printf("2 - Paper\n");
     printf("3 - Scissors\n");
     printf("Choose one: ");
-    scanf("%d", n);
+    if (fgets(temp, 4, stdin) == NULL) {
+        printf("error: %d\n", errno);
+    };
+    *n = strtol(temp, &endptr, 10);
+
 }
 
-long int random() {
-    srand(time(0));
+long random(void) {
+    srand((unsigned int)time(0)); // this conversion isn't ideal, but I don't
+    // mind losing the first part of this data
     return (rand() % 3) + 1;
 }
 
