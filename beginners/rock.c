@@ -94,18 +94,21 @@ int main(void) {
 }
 
 void choose(long *n) {
-    char temp[4] = "a\0";
-    char *endptr;
+    char temp[3] = "a\0";
 
-    printf("\nOptions:\n");
+    printf("Options:\n");
     printf("1 - Rock\n");
     printf("2 - Paper\n");
     printf("3 - Scissors\n");
     printf("Choose one: ");
-    if (fgets(temp, 4, stdin) == NULL) {
+    if (fgets(temp, 3, stdin) == NULL) {
         printf("error: %d\n", errno);
     };
-    *n = strtol(temp, &endptr, 10);
+
+    while(temp[1] != '\n' && getchar() != '\n'); 
+// based on Source - https://stackoverflow.com/a/40555134
+// Posted by ad absurdum, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-05-23, License - CC BY-SA 3.0
 }
 
 long random(void) {
