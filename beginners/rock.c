@@ -40,7 +40,7 @@ int main(void) {
     for (;;) {
         if ((n <= 0) || (n >= 4)) {
             choose(&n);
-        }
+        } else break;
     }
 
     for (int i = 0; i <= 2; i++) {
@@ -106,7 +106,6 @@ void choose(long *n) {
         printf("error: %d\n", errno);
     };
     *n = strtol(temp, &endptr, 10);
-
 }
 
 long random(void) {
